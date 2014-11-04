@@ -27,7 +27,7 @@ public class AdsCourse extends BaseCourse {
 
     ReportAdsActionResp resp = new ReportAdsActionResp();
     this.sendBaseNormalResponse(req, resp);
-    System.out.println("req info:"+req+" success resp");
+    System.out.println("req info:"+req+" success resp ok");
 
   }
 
