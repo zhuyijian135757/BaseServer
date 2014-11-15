@@ -1,7 +1,7 @@
 /*******************************************************************************
- * CopyRight (c) 2005-2013 JoyReach Ltd. All rights reserved. 
+ * CopyRight (c) 2005-2013 flyingfat Ltd. All rights reserved. 
  * Filename: BaseCourse.java
- * Creator: xiaolei Wan
+ * Creator: terry.zhu
  * Version: 8:15:26 PM Aug 6, 2013
  * Description:
  *******************************************************************************/

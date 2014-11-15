@@ -1,29 +1,21 @@
 package net.flyingfat.common.biz.test;
 /*******************************************************************************
- * CopyRight (c) 2005-2013 JoyReach Ltd. All rights reserved. 
- * Filename: ContinueLoginTestCase.java 
- * Creator: wenqiang.xu 
+ * CopyRight (c) 2005-2013 flyingfat Ltd. All rights reserved. 
+ * Filename: AdsTestCase.java 
+ * Creator: terry.zhu
  * Version: 1.0 Date: Jan. 3, 2014 5:15:08 PM
  * Description:
  *******************************************************************************/
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
 import net.flyingfat.common.biz.xip.ReportAdsActionReq;
 import net.flyingfat.common.biz.xip.ReportAdsActionResp;
 import net.flyingfat.common.http.HttpConnector;
-import net.flyingfat.common.http.codec.HttpRequestDecoder;
 import net.flyingfat.common.http.codec.HttpRequestEncoder;
 import net.flyingfat.common.http.codec.HttpResponseDecoder;
-import net.flyingfat.common.http.codec.HttpResponseEncoder;
 import net.flyingfat.common.serialization.protocol.meta.DefaultMsgCode2TypeMetainfo;
 import net.flyingfat.common.serialization.protocol.meta.MetainfoUtils;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import junit.framework.TestCase;
