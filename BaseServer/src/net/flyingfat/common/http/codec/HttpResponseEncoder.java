@@ -137,12 +137,8 @@ public class HttpResponseEncoder
     if (this.byteBeanCodec == null)
     {
       DefaultCodecProvider codecProvider = new DefaultCodecProvider();
-      
 
       codecProvider.addCodec(new AnyCodec()).addCodec(new ByteCodec()).addCodec(new ShortCodec()).addCodec(new IntCodec()).addCodec(new LongCodec()).addCodec(new CStyleStringCodec()).addCodec(new LenByteArrayCodec()).addCodec(new LenListCodec()).addCodec(new LenArrayCodec()).addCodec(new FloatCodec());
-      
-
-
       EarlyStopBeanCodec byteBeanCodec = new EarlyStopBeanCodec(new DefaultField2Desc());
       codecProvider.addCodec(byteBeanCodec);
       

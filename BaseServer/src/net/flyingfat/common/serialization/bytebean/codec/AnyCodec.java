@@ -60,8 +60,7 @@ public class AnyCodec
     }
     logger.error("encode : can not find matched codec for field [" + ctx.getField() + "].");
     
-
-
     return new byte[0];
   }
+  
 }
