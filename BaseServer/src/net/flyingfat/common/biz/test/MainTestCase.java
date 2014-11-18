@@ -9,8 +9,8 @@ package net.flyingfat.common.biz.test;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.flyingfat.common.biz.xip.ReportAdsActionReq;
-import net.flyingfat.common.biz.xip.ReportAdsActionResp;
+import net.flyingfat.common.biz.xip.ReportActionReq;
+import net.flyingfat.common.biz.xip.ReportActionResp;
 import net.flyingfat.common.http.HttpConnector;
 import net.flyingfat.common.http.codec.HttpRequestEncoder;
 import net.flyingfat.common.http.codec.HttpResponseDecoder;
@@ -21,7 +21,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 
 
-public class AdsTestCase extends TestCase {
+public class MainTestCase extends TestCase {
 
 
   @Test
@@ -50,13 +50,13 @@ public class AdsTestCase extends TestCase {
 	  
 	  ArrayList<String> list=new ArrayList<String>();
 	  list.add("xxx");
-	  ReportAdsActionReq req=new ReportAdsActionReq();
+	  ReportActionReq req=new ReportActionReq();
 	  req.setUid("ddd");
 	  req.setId(1l);
 	  req.setOrderId(10);
 	  req.setList(list);
 	  
-	  ReportAdsActionResp resp = (ReportAdsActionResp) httpConnector.sendAndWait(req);
+	  ReportActionResp resp = (ReportActionResp) httpConnector.sendAndWait(req);
 	  System.out.println(resp.toString());
 	  
 	  

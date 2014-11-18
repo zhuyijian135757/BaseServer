@@ -3,7 +3,7 @@ package net.flyingfat.common.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.flyingfat.common.biz.AdsCourse;
+import net.flyingfat.common.biz.MainCourse;
 import net.flyingfat.common.dispatcher.course.BusinessCourse;
 import net.flyingfat.common.dispatcher.receiver.SimpleDispatcher;
 import net.flyingfat.common.http.HttpAcceptor;
@@ -39,7 +39,7 @@ public class BaseServer {
 			SimpleDispatcher bizEntry=new SimpleDispatcher();
 			bizEntry.setThreads(3);
 			List<BusinessCourse> bCourse=new ArrayList<BusinessCourse>();
-			bCourse.add(new AdsCourse());
+			bCourse.add(new MainCourse());
 			bizEntry.setCourses(bCourse);
 			
 			HttpAcceptor httpAcceptor=new HttpAcceptor();
