@@ -27,6 +27,7 @@ public class MainTestCase extends TestCase {
   @Test
   public void testReportAdsActionReq() {
 	  
+	  
 	 List<String> pkgs=new ArrayList<String>();
 	 pkgs.add("net.flyingfat.common.biz.xip.*");
 	 DefaultMsgCode2TypeMetainfo typeMetaInfo=MetainfoUtils.createTypeMetainfo(pkgs);
