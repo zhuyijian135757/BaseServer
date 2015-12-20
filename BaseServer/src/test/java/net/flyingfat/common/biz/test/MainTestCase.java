@@ -9,6 +9,7 @@ package net.flyingfat.common.biz.test;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.flyingfat.common.biz.xip.ReportActionReq;
 import net.flyingfat.common.biz.xip.ReportActionResp;
 import net.flyingfat.common.http.HttpConnector;
@@ -16,6 +17,7 @@ import net.flyingfat.common.http.codec.HttpRequestEncoder;
 import net.flyingfat.common.http.codec.HttpResponseDecoder;
 import net.flyingfat.common.serialization.protocol.meta.DefaultMsgCode2TypeMetainfo;
 import net.flyingfat.common.serialization.protocol.meta.MetainfoUtils;
+
 import org.junit.Test;
 
 import junit.framework.TestCase;
@@ -35,6 +37,7 @@ public class MainTestCase extends TestCase {
 	 HttpRequestEncoder reqEncoder=new HttpRequestEncoder();
 	 reqEncoder.setDebugEnabled(true);
 	 reqEncoder.setEncryptKey("__jDlog_".getBytes());
+	 reqEncoder.setReserved(1);
 		
 	 HttpResponseDecoder respDecoder=new HttpResponseDecoder();
 	 respDecoder.setDebugEnabled(true);
@@ -57,17 +60,17 @@ public class MainTestCase extends TestCase {
 	  req.setOrderId(10);
 	  req.setList(list);
 	  
+	  try {
+		Thread.sleep(100);
+	  } catch (InterruptedException e) {
+		e.printStackTrace();
+	  }
+	  
 	  ReportActionResp resp = (ReportActionResp) httpConnector.sendAndWait(req);
 	  System.out.println(resp.toString());
 	  
 	  
-    /*ReportAdsActionReq req = new ReportAdsActionReq();
-    req.setIdentification(UUID.randomUUID());
-    HttpConnector sender = (HttpConnector) ctx.getBean("connector_test");
-
-    ReportAdsActionResp resp = (ReportAdsActionResp) sender.sendAndWait(req);
-    System.out.println(resp.toString());*/
   }
-
+  
   
 }

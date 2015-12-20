@@ -108,9 +108,14 @@ public class XipHeader
     this.secondTransaction = uuid.getLeastSignificantBits();
   }
   
+  /**
+   * 客户端由httpclient实现，服务端统一分配标识号,返回 UUID.randomUUID()
+   * 客户端由httpConnector实现，客户端各自指定标识号，返回new UUID(this.firstTransaction, this.secondTransaction); 
+   * @return
+   */
   public UUID getTransactionAsUUID()
   {
-    return UUID.randomUUID();
+      return new UUID(this.firstTransaction, this.secondTransaction); 
   }
   
   public void setTypeForClass(Class<?> cls)

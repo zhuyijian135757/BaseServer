@@ -1,7 +1,5 @@
 package net.flyingfat.common.biz.xip;
 
-import net.flyingfat.common.xip.AbstractXipResponse;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 

@@ -1,4 +1,4 @@
-package net.flyingfat.common.xip;
+package net.flyingfat.common.biz.xip;
 
 import net.flyingfat.common.serialization.bytebean.ByteBean;
 import net.flyingfat.common.serialization.bytebean.annotation.ByteField;

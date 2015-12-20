@@ -47,7 +47,7 @@ public class HttpResponseEncoder
   private int dumpBytes = 256;
   private boolean isDebugEnabled;
   private byte[] encryptKey;
-  private String keepAliveFlag;
+  private String keepAliveFlag="false";
   
   public HttpResponse transform(Object signal)
   {
