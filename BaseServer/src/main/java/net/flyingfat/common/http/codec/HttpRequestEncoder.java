@@ -47,11 +47,13 @@ public class HttpRequestEncoder
   private int dumpBytes = 256;
   private boolean isDebugEnabled;
   private byte[] encryptKey;
+  private Integer reserved;
   
   protected Object encode(ChannelHandlerContext ctx, Channel channel, Object msg)
     throws Exception
   {
     HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.POST, "/");
+    request.setHeader("Host", channel.getRemoteAddress());
     if ((msg instanceof XipSignal))
     {
       byte[] bytes = encodeXip((XipSignal)msg);
@@ -67,11 +69,11 @@ public class HttpRequestEncoder
     return request;
   }
   
-  private byte[] encodeXip(XipSignal signal)
+  public byte[] encodeXip(XipSignal signal)
     throws Exception
   {
     byte[] bytesBody = getByteBeanCodec().encode(getByteBeanCodec().getEncContextFactory().createEncContext(signal, signal.getClass(), null));
-    if (getEncryptKey() != null) {
+    if (reserved != null && reserved!=XipHeader.CONTENT_DES) {
       try
       {
         bytesBody = DESUtil.encrypt(bytesBody, getEncryptKey());
@@ -103,14 +105,12 @@ public class HttpRequestEncoder
   private XipHeader createHeader(byte basicVer, UUID id, int messageCode, int messageLen)
   {
     XipHeader header = new XipHeader();
-    
     header.setTransaction(id);
-    
     int headerSize = getByteBeanCodec().getStaticByteSize(XipHeader.class);
-    
     header.setLength(headerSize + messageLen);
     header.setMessageCode(messageCode);
     header.setBasicVer(basicVer);
+    header.setReserved(reserved);
     
     return header;
   }
@@ -180,4 +180,14 @@ public class HttpRequestEncoder
   {
     this.encryptKey = encryptKey;
   }
+
+  public int getReserved() {
+	return reserved;
+  }
+
+  public void setReserved(int reserved) {
+	this.reserved = reserved;
+  }
+  
+  
 }

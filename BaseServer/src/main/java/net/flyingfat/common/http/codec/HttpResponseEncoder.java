@@ -29,6 +29,7 @@ import net.flyingfat.common.serialization.protocol.xip.XipHeader;
 import net.flyingfat.common.serialization.protocol.xip.XipSignal;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpRequest;
@@ -46,6 +47,7 @@ public class HttpResponseEncoder
   private int dumpBytes = 256;
   private boolean isDebugEnabled;
   private byte[] encryptKey;
+  private String keepAliveFlag;
   
   public HttpResponse transform(Object signal)
   {
@@ -73,8 +75,10 @@ public class HttpResponseEncoder
         resp.setHeader("uuid", uuid);
       }
       String keepAlive = req.getHeader("Connection");
-      if (keepAlive != null) {
-        resp.setHeader("Connection", keepAlive);
+      if (StringUtils.isNotBlank(keepAlive) && StringUtils.isBlank(keepAliveFlag)) {
+    	  resp.setHeader("Connection", keepAlive);
+      }else{
+    	  resp.setHeader("Connection", keepAliveFlag);
       }
     }
     return resp;
@@ -82,8 +86,9 @@ public class HttpResponseEncoder
   
   private byte[] encodeXip(XipSignal signal)
   {
+	Integer reserved=signal.getReserved();
     byte[] bytesBody = getByteBeanCodec().encode(getByteBeanCodec().getEncContextFactory().createEncContext(signal, signal.getClass(), null));
-    if (getEncryptKey() != null) {
+    if (reserved!=null && reserved!=XipHeader.CONTENT_DES) {
       try
       {
         bytesBody = DESUtil.encrypt(bytesBody, getEncryptKey());
@@ -98,9 +103,9 @@ public class HttpResponseEncoder
       throw new RuntimeException("invalid signal, no messageCode defined.");
     }
     XipHeader header = createHeader((byte)1, signal.getIdentification(), attr.messageCode(), bytesBody.length);
-    
 
     header.setTypeForClass(signal.getClass());
+    header.setReserved(reserved);
     
     byte[] bytes = ArrayUtils.addAll(getByteBeanCodec().encode(getByteBeanCodec().getEncContextFactory().createEncContext(header, XipHeader.class, null)), bytesBody);
     if ((logger.isDebugEnabled()) && (this.isDebugEnabled))
@@ -188,4 +193,16 @@ public class HttpResponseEncoder
   {
     this.encryptKey = encryptKey;
   }
+
+  public String getKeepAliveFlag() {
+	return keepAliveFlag;
+  }
+
+  public void setKeepAliveFlag(String keepAliveFlag) {
+	this.keepAliveFlag = keepAliveFlag;
+  }
+
+  
+
+  
 }

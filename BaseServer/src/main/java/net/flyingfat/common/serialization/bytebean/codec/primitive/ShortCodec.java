@@ -40,7 +40,7 @@ public class ShortCodec
   
   public byte[] encode(EncContext ctx)
   {
-    short enc = ((Short)ctx.getEncObject()).shortValue();
+    short enc = ctx.getEncObject()==null ? 0 :((Short)ctx.getEncObject()).shortValue();
     int byteLength = ctx.getByteSize();
     NumberCodec numberCodec = ctx.getNumberCodec();
     

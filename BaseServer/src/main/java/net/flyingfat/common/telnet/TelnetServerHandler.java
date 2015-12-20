@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelEvent;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
@@ -39,6 +41,8 @@ public class TelnetServerHandler
   {
     String request = (String)e.getMessage();
     
+
+
     boolean close = false;
     String response;
     if (request.length() == 0)

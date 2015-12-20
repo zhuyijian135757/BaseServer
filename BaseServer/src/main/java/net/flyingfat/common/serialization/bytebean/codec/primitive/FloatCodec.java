@@ -40,7 +40,7 @@ public class FloatCodec
   
   public byte[] encode(EncContext ctx)
   {
-    float enc = ((Float)ctx.getEncObject()).floatValue();
+    float enc = ctx.getEncObject()==null ? 0 :((Float)ctx.getEncObject()).floatValue();
     int byteLength = ctx.getByteSize();
     NumberCodec numberCodec = ctx.getNumberCodec();
     

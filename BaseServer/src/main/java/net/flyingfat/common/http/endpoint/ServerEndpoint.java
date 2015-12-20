@@ -5,12 +5,13 @@ import java.net.InetSocketAddress;
 
 import net.flyingfat.common.http.TransportUtil;
 import net.flyingfat.common.http.codec.HttpResponseEncoder;
+import net.flyingfat.common.http.response.ConstantResponse;
 import net.flyingfat.common.http.response.DefaultHttpResponseSender;
 import net.flyingfat.common.http.response.HttpResponseSender;
-import net.flyingfat.common.lang.Holder;
 import net.flyingfat.common.lang.IpPortPair;
 import net.flyingfat.common.lang.KeyTransformer;
 import net.flyingfat.common.lang.Transformer;
+import net.flyingfat.common.lang.holder.Holder;
 import net.flyingfat.common.lang.transport.Receiver;
 
 import org.jboss.netty.channel.Channel;
@@ -30,6 +31,7 @@ public class ServerEndpoint
   private HttpResponseSender httpResponseSender = new DefaultHttpResponseSender();
   private Transformer<Object, HttpResponse> responseEncoder = new HttpResponseEncoder();
   private InetSocketAddress addr = null;
+  private Object identity;
   
   public void send(Object bean)
   {
@@ -37,16 +39,21 @@ public class ServerEndpoint
     {
       Object key = this.keyTransformer.transform(bean);
       if (key == null) {
-        return;
+    	logger.warn("req identification is null ");
+    	doExceptionSend();
+    	return;
       }
-      if (this.responseContext == null)
+      if (getResponseContext() == null)
       {
-        logger.warn("responseContext is null");
+        logger.warn("key is {}, but responseContext is null",key);
+        doExceptionSend();
         return;
       }
       HttpRequest req = (HttpRequest)getResponseContext().getAndRemove(key);
       if (req == null) {
-        return;
+    	logger.warn("key is {},but cannot getAndRemove HttpRequest",key);
+    	doExceptionSend();
+    	return;
       }
       TransportUtil.attachRequest(bean, req);
       
@@ -63,7 +70,10 @@ public class ServerEndpoint
   {
     Object key = this.keyTransformer.transform(msg);
     if (key != null) {
-      getResponseContext().put(key, TransportUtil.getRequestOf(msg));
+        getResponseContext().put(key, TransportUtil.getRequestOf(msg));
+        setIdentity(key);
+    }else{
+    	logger.error("req key is null");
     }
     if (this.messageClosure != null) {
       this.messageClosure.messageReceived(msg);
@@ -72,6 +82,9 @@ public class ServerEndpoint
   
   public void stop()
   {
+	if(getResponseContext()!=null && identity!=null){
+		getResponseContext().remove(identity);
+	}
     this.responseContext = null;
     this.messageClosure = null;
     this.channel = null;
@@ -86,6 +99,12 @@ public class ServerEndpoint
       HttpResponse response = (HttpResponse)this.responseEncoder.transform(bean);
       this.httpResponseSender.sendResponse(this.channel, response);
     }
+  }
+  
+  private void doExceptionSend()
+  {
+	  HttpResponse response=ConstantResponse.getResponseServerBusy();
+      this.httpResponseSender.sendResponse(this.channel, response);
   }
   
   public void setChannel(Channel channel)
@@ -131,4 +150,16 @@ public class ServerEndpoint
   {
     this.addr = addr;
   }
+
+  public Object getIdentity() {
+	return identity;
+  }
+
+  public void setIdentity(Object identity) {
+	this.identity = identity;
+  }
+
+  
+  
+  
 }

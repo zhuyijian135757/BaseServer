@@ -97,11 +97,11 @@ public class SimpleDispatcher
     EMPTY_METHOD = tmp;
   }
   
-  private SimpleCache<Key, Method> bizMethodCache = new SimpleCache();
+  private SimpleCache<Key, Method> bizMethodCache = new SimpleCache<Key, Method>();
   
   private Method getBizMethod(final Class<?> courseClass, final Class<?> beanClass)
   {
-    Method ret = (Method)bizMethodCache.get(new Key(courseClass, beanClass), new Callable()
+    Method ret = (Method)bizMethodCache.get(new Key(courseClass, beanClass), new Callable<Method>()
     {
       public Method call()
         throws Exception

@@ -24,7 +24,7 @@ public class LenListCodec
   implements ByteFieldCodec
 {
   private static final Logger logger = LoggerFactory.getLogger(LenListCodec.class);
-  public int maxArryListLen = 30;
+  public int maxArryListLen = 10000;
   
   public FieldCodecCategory getCategory()
   {
@@ -41,7 +41,8 @@ public class LenListCodec
     if (listLength <= this.maxArryListLen) {
       list = new ArrayList(listLength);
     } else {
-      list = new ArrayList(this.maxArryListLen);
+       String errorMsg="list length is too long, is easy to OOM, current length is "+listLength+", current class is "+compomentClass;
+       throw new RuntimeException(errorMsg);
     }
     if (listLength > 0)
     {

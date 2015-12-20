@@ -1,4 +1,4 @@
-package net.flyingfat.common.server;
+package net.flyingfat.common.booter;
 
 import java.util.ArrayList;
 import java.util.List;

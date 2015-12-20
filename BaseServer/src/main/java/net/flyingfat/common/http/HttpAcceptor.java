@@ -10,8 +10,8 @@ import net.flyingfat.common.http.endpoint.EndpointFactory;
 import net.flyingfat.common.http.reactor.ConstantResponseReactor;
 import net.flyingfat.common.http.reactor.HttpReactor;
 import net.flyingfat.common.http.response.ConstantResponse;
-import net.flyingfat.common.lang.Holder;
 import net.flyingfat.common.lang.Transformer;
+import net.flyingfat.common.lang.holder.Holder;
 import net.flyingfat.common.lang.transport.Receiver;
 
 import org.jboss.netty.channel.Channel;
@@ -33,6 +33,9 @@ import org.jboss.netty.handler.codec.http.HttpServerCodec;
 import org.jboss.netty.handler.timeout.IdleState;
 import org.jboss.netty.handler.timeout.IdleStateAwareChannelUpstreamHandler;
 import org.jboss.netty.handler.timeout.IdleStateEvent;
+import org.jboss.netty.handler.timeout.IdleStateHandler;
+import org.jboss.netty.util.HashedWheelTimer;
+import org.jboss.netty.util.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,15 +63,16 @@ public class HttpAcceptor
   public void start()
     throws IOException
   {
+	//final HashedWheelTimer timer=new HashedWheelTimer(); CCS 服务需要使用
     this.bootstrap.setPipelineFactory(new ChannelPipelineFactory()
     {
       public ChannelPipeline getPipeline()
         throws Exception
       {
         ChannelPipeline pipeline = new DefaultChannelPipeline();
-        
         pipeline.addLast("codec", new HttpServerCodec());
-        pipeline.addLast("aggregator", new HttpChunkAggregator(HttpAcceptor.this.maxContentLength));
+        pipeline.addLast("aggregator", new HttpChunkAggregator(maxContentLength));
+        //pipeline.addLast("idlehandler", new IdleStateHandler(timer, 10, 0 , 0));
         pipeline.addLast("handler", new HttpRequestHandler());
         return pipeline;
       }
@@ -135,7 +139,7 @@ public class HttpAcceptor
         this.logger.trace("message received {}", e.getMessage());
       }
       DefaultHttpRequest request = (DefaultHttpRequest)e.getMessage();
-      Object signal = HttpAcceptor.this.requestDecoder.transform(request);
+      Object signal = requestDecoder.transform(request);
       if (null != signal)
       {
         Endpoint endpoint = TransportUtil.getEndpointOfSession(e.getChannel());
@@ -150,10 +154,10 @@ public class HttpAcceptor
           this.logger.warn("missing endpoint, ignore incoming msg:", signal);
         }
       }
-      else if (null != HttpAcceptor.this.errorReactor)
+      else if (null != errorReactor)
       {
         this.logger.error("content is null, try send back client empty HttpResponse.");
-        HttpAcceptor.this.errorReactor.onHttpRequest(null, request);
+        errorReactor.onHttpRequest(e.getChannel(), request);
       }
       else
       {
@@ -174,7 +178,7 @@ public class HttpAcceptor
       throws Exception
     {
       if (this.logger.isDebugEnabled()) {
-        this.logger.debug("channelClosed: [" + e.getChannel().getRemoteAddress() + "]");
+        this.logger.debug("channelClosed: [" + e.getChannel() + "]");
       }
       Endpoint endpoint = TransportUtil.getEndpointOfSession(e.getChannel());
       if (null != endpoint) {
@@ -187,9 +191,9 @@ public class HttpAcceptor
       throws Exception
     {
       if (this.logger.isDebugEnabled()) {
-        this.logger.debug("channelOpen: [" + e.getChannel().getRemoteAddress() + "]");
+        this.logger.debug("channelOpen: [" + e.getChannel() + "]");
       }
-      Endpoint endpoint = HttpAcceptor.this.endpointFactory.createEndpoint(e.getChannel(), HttpAcceptor.this.responseEncoder);
+      Endpoint endpoint = endpointFactory.createEndpoint(e.getChannel(), responseEncoder);
       if (null != endpoint)
       {
         TransportUtil.attachEndpointToSession(e.getChannel(), endpoint);
@@ -200,9 +204,7 @@ public class HttpAcceptor
     public void channelIdle(ChannelHandlerContext ctx, IdleStateEvent e)
       throws Exception
     {
-      if (this.logger.isInfoEnabled()) {
-        this.logger.info("channelIdle: " + e.getState().name() + " for " + (System.currentTimeMillis() - e.getLastActivityTimeMillis()) + " milliseconds, close channel[" + e.getChannel().getRemoteAddress() + "]");
-      }
+      this.logger.warn("channelIdle: " + e.getState().name() + " for " + (System.currentTimeMillis() - e.getLastActivityTimeMillis()) + " milliseconds, close channel[" + e.getChannel().getRemoteAddress() + "]");
       e.getChannel().close();
     }
   }

@@ -70,7 +70,7 @@ public class HttpRequestDecoder
       throw new RuntimeException("unknow message code:" + header.getMessageCode());
     }
     byte[] bodyBytes = ArrayUtils.subarray(bytes, XipHeader.HEADER_LENGTH, bytes.length);
-    if (getEncryptKey() != null) {
+    if (header != null && header.getReserved()!=XipHeader.CONTENT_DES) {
       try
       {
         bodyBytes = DESUtil.decrypt(bodyBytes, getEncryptKey());
@@ -80,9 +80,11 @@ public class HttpRequestDecoder
         throw new RuntimeException("decode decryption failed." + e.getMessage());
       }
     }
+    
     XipSignal signal = (XipSignal)getByteBeanCodec().decode(getByteBeanCodec().getDecContextFactory().createDecContext(bodyBytes, type, null, null)).getValue();
     if (null != signal) {
       signal.setIdentification(header.getTransactionAsUUID());
+      signal.setReserved(header.getReserved());
     }
     return signal;
   }

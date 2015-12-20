@@ -37,6 +37,7 @@ public class ByteCodec
   
   public byte[] encode(EncContext ctx)
   {
-    return new byte[] { ((Byte)ctx.getEncObject()).byteValue() };
+	byte enc = ctx.getEncObject()==null ? 0 :((Byte)ctx.getEncObject()).byteValue();
+    return new byte[] {enc};
   }
 }

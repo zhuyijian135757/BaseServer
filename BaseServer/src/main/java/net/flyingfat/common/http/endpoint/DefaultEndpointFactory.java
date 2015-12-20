@@ -1,8 +1,8 @@
 package net.flyingfat.common.http.endpoint;
 
-import net.flyingfat.common.lang.Holder;
 import net.flyingfat.common.lang.Transformer;
-import net.flyingfat.common.lang.transport.DefaultHolder;
+import net.flyingfat.common.lang.holder.DefaultHolder;
+import net.flyingfat.common.lang.holder.Holder;
 import net.flyingfat.common.lang.transport.Receiver;
 
 import org.jboss.netty.channel.Channel;

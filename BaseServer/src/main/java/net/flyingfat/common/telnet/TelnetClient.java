@@ -25,14 +25,19 @@ public class TelnetClient
     this.future = this.bootstrap.connect(new InetSocketAddress(ip, port));
   }
   
-  public void telnet(String command)
+  /**
+   * 这个方法返回的是上一次telnet命令是否成功
+   * @param command
+   * @return
+   */
+  public boolean telnet(String command)
   {
     Channel channel = this.future.awaitUninterruptibly().getChannel();
     if (!this.future.isSuccess())
     {
       this.future.getCause().printStackTrace();
       this.bootstrap.releaseExternalResources();
-      return;
+      return false;
     }
     ChannelFuture lastWriteFuture = null;
     
@@ -49,6 +54,7 @@ public class TelnetClient
 
       this.bootstrap.releaseExternalResources();
     }
+    return lastWriteFuture.isSuccess();
   }
   
   public static void main(String[] args)

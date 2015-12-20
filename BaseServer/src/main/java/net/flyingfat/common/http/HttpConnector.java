@@ -7,9 +7,9 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import net.flyingfat.common.lang.Holder;
 import net.flyingfat.common.lang.KeyTransformer;
-import net.flyingfat.common.lang.transport.DefaultHolder;
+import net.flyingfat.common.lang.holder.DefaultHolder;
+import net.flyingfat.common.lang.holder.Holder;
 import net.flyingfat.common.lang.transport.Receiver;
 import net.flyingfat.common.lang.transport.Sender;
 import net.flyingfat.common.lang.transport.SenderSync;
@@ -96,10 +96,10 @@ public class HttpConnector
       {
         ChannelPipeline pipeline = new DefaultChannelPipeline();
         pipeline.addLast("codec", new HttpClientCodec());
-        pipeline.addLast("aggregator", new HttpChunkAggregator(HttpConnector.this.maxContentLength));
+        pipeline.addLast("aggregator", new HttpChunkAggregator(maxContentLength));
         
-        pipeline.addLast("nettyEncoder", HttpConnector.this.encoder);
-        pipeline.addLast("nettyDecoder", HttpConnector.this.decoder);
+        pipeline.addLast("nettyEncoder", encoder);
+        pipeline.addLast("nettyDecoder", decoder);
         
         pipeline.addLast("handler", new HttpResponseHandler());
         return pipeline;
@@ -155,6 +155,13 @@ public class HttpConnector
     if (null == bean) {
       return null;
     }
+	while(channel==null){
+	  try {
+		Thread.sleep(1);
+	  } catch (InterruptedException e) {
+		e.printStackTrace();
+	  } 
+	}
     if (this.channel != null)
     {
       Object key = this.keyTransformer.transform(bean);
@@ -194,19 +201,19 @@ public class HttpConnector
       throws Exception
     {
       this.logger.debug("channelConnected: " + e.getChannel());
-      HttpConnector.this.channel = e.getChannel();
+      channel = e.getChannel();
     }
     
     public void channelDisconnected(ChannelHandlerContext ctx, final ChannelStateEvent e)
       throws Exception
     {
       this.logger.debug("channelDisconnected: " + e.getChannel());
-      HttpConnector.this.channel = null;
-      HttpConnector.this.exec.submit(new Runnable()
+      channel = null;
+      exec.submit(new Runnable()
       {
         public void run()
         {
-          HttpConnector.this.onSessionClosed(e.getChannel());
+          onSessionClosed(e.getChannel());
         }
       });
     }
@@ -224,10 +231,10 @@ public class HttpConnector
       if (this.logger.isTraceEnabled()) {
         this.logger.trace("messageReceived: " + e.getMessage());
       }
-      Object key = HttpConnector.this.keyTransformer.transform(e.getMessage());
+      Object key = keyTransformer.transform(e.getMessage());
       if (key != null)
       {
-        Object context = HttpConnector.this.getContext().getAndRemove(key);
+        Object context = getContext().getAndRemove(key);
         if (null != context) {
           try
           {
@@ -244,8 +251,8 @@ public class HttpConnector
           {
             this.logger.error("messageReceived error.", e1);
           }
-        } else if (null != HttpConnector.this.messageClosure) {
-          HttpConnector.this.messageClosure.messageReceived(e.getMessage());
+        } else if (null != messageClosure) {
+          messageClosure.messageReceived(e.getMessage());
         } else {
           this.logger.warn("missing closure, ignore incoming msg:" + e.getMessage());
         }
@@ -274,11 +281,11 @@ public class HttpConnector
       public void operationComplete(final ChannelFuture connectFuture)
         throws Exception
       {
-        HttpConnector.this.exec.submit(new Runnable()
+        exec.submit(new Runnable()
         {
           public void run()
           {
-            HttpConnector.this.onConnectComplete(connectFuture);
+            onConnectComplete(connectFuture);
           }
         });
       }
@@ -296,7 +303,7 @@ public class HttpConnector
       {
         public void run()
         {
-          HttpConnector.this.doConnect();
+          doConnect();
         }
       }, this.retryTimeout, TimeUnit.MILLISECONDS);
     }

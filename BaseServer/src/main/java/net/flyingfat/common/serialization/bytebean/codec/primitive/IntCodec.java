@@ -40,7 +40,7 @@ public class IntCodec
   
   public byte[] encode(EncContext ctx)
   {
-    int enc = ((Integer)ctx.getEncObject()).intValue();
+    int enc =ctx.getEncObject()==null ? 0 : ((Integer)ctx.getEncObject()).intValue();
     int byteLength = ctx.getByteSize();
     NumberCodec numberCodec = ctx.getNumberCodec();
     

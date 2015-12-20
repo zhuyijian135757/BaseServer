@@ -76,18 +76,17 @@ public class HttpResponseDecoder
     return msg;
   }
   
-  private XipSignal decodeXipSignal(byte[] bytes)
+  public XipSignal decodeXipSignal(byte[] bytes)
     throws Exception
   {
     XipHeader header = (XipHeader)getByteBeanCodec().decode(getByteBeanCodec().getDecContextFactory().createDecContext(bytes, XipHeader.class, null, null)).getValue();
-    
 
     Class<?> type = this.typeMetaInfo.find(header.getMessageCode());
     if (null == type) {
       throw new RuntimeException("unknow message code:" + header.getMessageCode());
     }
     byte[] bodyBytes = ArrayUtils.subarray(bytes, XipHeader.HEADER_LENGTH, bytes.length);
-    if (getEncryptKey() != null) {
+    if (header!=null && header.getReserved()!=XipHeader.CONTENT_DES) {
       try
       {
         bodyBytes = DESUtil.decrypt(bodyBytes, getEncryptKey());

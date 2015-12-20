@@ -40,7 +40,7 @@ public class LongCodec
   
   public byte[] encode(EncContext ctx)
   {
-    long enc = ((Long)ctx.getEncObject()).longValue();
+    long enc = ctx.getEncObject()==null ? 0 :((Long)ctx.getEncObject()).longValue();
     int byteLength = ctx.getByteSize();
     NumberCodec numberCodec = ctx.getNumberCodec();
     

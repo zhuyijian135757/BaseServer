@@ -89,7 +89,7 @@ public class ServerBootstrap
     {
       try
       {
-        future = (ChannelFuture)futureQueue.poll(2147483647L, TimeUnit.SECONDS);
+        future = (ChannelFuture)futureQueue.poll(Integer.MAX_VALUE, TimeUnit.SECONDS);
       }
       catch (InterruptedException e)
       {

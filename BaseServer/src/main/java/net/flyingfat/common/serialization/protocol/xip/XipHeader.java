@@ -13,6 +13,7 @@ public class XipHeader
   public static final int XIP_REQUEST = 1;
   public static final int XIP_RESPONSE = 2;
   public static final int XIP_NOTIFY = 3;
+  public static final int CONTENT_DES = 1;
   @ByteField(index=0, bytes=1)
   private int basicVer = 1;
   @ByteField(index=1)
@@ -20,7 +21,7 @@ public class XipHeader
   @ByteField(index=2, bytes=1)
   private int type = 1;
   @ByteField(index=3, bytes=2)
-  private int reserved = 0;
+  private int reserved = 0; //区分加解密:0需要加解密 1不需要加解密
   @ByteField(index=4)
   private long firstTransaction;
   @ByteField(index=5)
@@ -109,7 +110,7 @@ public class XipHeader
   
   public UUID getTransactionAsUUID()
   {
-    return new UUID(this.firstTransaction, this.secondTransaction);
+    return UUID.randomUUID();
   }
   
   public void setTypeForClass(Class<?> cls)

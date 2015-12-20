@@ -20,6 +20,12 @@
 		
 		<dependency>
 			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.6.0</version>
 		</dependency>
@@ -30,21 +36,17 @@
 			<version>2.5</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		
   </dependencies>
   
   
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    
-    <resources>
-      <resource>
-        <directory>resource</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
-    
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -55,6 +57,6 @@
         </configuration>
       </plugin>
     </plugins>
-    
   </build>
+  
 </project>
