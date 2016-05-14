@@ -49,7 +49,7 @@ public class TransactionStatisticer
     {
       public void run()
       {
-        TransactionStatisticer.this.calculatePerformance();
+        calculatePerformance();
       }
     }, this.caculateInterval, this.caculateInterval);
   }

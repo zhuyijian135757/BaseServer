@@ -1,19 +1,5 @@
 package net.flyingfat.common.http;
 
-import java.net.InetSocketAddress;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import net.flyingfat.common.lang.KeyTransformer;
-import net.flyingfat.common.lang.holder.DefaultHolder;
-import net.flyingfat.common.lang.holder.Holder;
-import net.flyingfat.common.lang.transport.Receiver;
-import net.flyingfat.common.lang.transport.Sender;
-import net.flyingfat.common.lang.transport.SenderSync;
-
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelDownstreamHandler;
@@ -31,6 +17,21 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.http.HttpChunkAggregator;
 import org.jboss.netty.handler.codec.http.HttpClientCodec;
+
+import java.net.InetSocketAddress;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import net.flyingfat.common.lang.KeyTransformer;
+import net.flyingfat.common.lang.holder.DefaultHolder;
+import net.flyingfat.common.lang.holder.Holder;
+import net.flyingfat.common.lang.transport.Receiver;
+import net.flyingfat.common.lang.transport.Sender;
+import net.flyingfat.common.lang.transport.SenderSync;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -8,8 +8,8 @@ import net.flyingfat.common.serialization.bytebean.annotation.ByteField;
 import net.flyingfat.common.serialization.protocol.annotation.SignalCode;
 
 
-@SignalCode(messageCode = MessageCode.MSG_CODE_FOR_REPORT_ADS_ACTION_REQ)
-public class ReportActionReq extends BaseXipRequest {
+@SignalCode(messageCode = MessageCode.MSG_CODE_FOR_SIMPLE_BIZ_REQ)
+public class SimpleBizReq extends BaseXipRequest {
 
     @ByteField(index = 0, description = "uid")
     private String                uid;

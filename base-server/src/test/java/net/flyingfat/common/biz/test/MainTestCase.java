@@ -10,8 +10,8 @@ package net.flyingfat.common.biz.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.flyingfat.common.biz.xip.ReportActionReq;
-import net.flyingfat.common.biz.xip.ReportActionResp;
+import net.flyingfat.common.biz.xip.SimpleBizReq;
+import net.flyingfat.common.biz.xip.SimpleBizResp;
 import net.flyingfat.common.http.HttpConnector;
 import net.flyingfat.common.http.codec.HttpRequestEncoder;
 import net.flyingfat.common.http.codec.HttpResponseDecoder;
@@ -27,7 +27,7 @@ public class MainTestCase extends TestCase {
 
 
   @Test
-  public void testReportAdsActionReq() {
+  public void testSimpleBizReq() {
 	  
 	  
 	 List<String> pkgs=new ArrayList<String>();
@@ -54,7 +54,7 @@ public class MainTestCase extends TestCase {
 	  
 	  ArrayList<String> list=new ArrayList<String>();
 	  list.add("xxx");
-	  ReportActionReq req=new ReportActionReq();
+	  SimpleBizReq req=new SimpleBizReq();
 	  req.setUid("ddd");
 	  req.setId(1l);
 	  req.setOrderId(10);
@@ -66,7 +66,7 @@ public class MainTestCase extends TestCase {
 		e.printStackTrace();
 	  }
 	  
-	  ReportActionResp resp = (ReportActionResp) httpConnector.sendAndWait(req);
+	  SimpleBizResp resp = (SimpleBizResp) httpConnector.sendAndWait(req);
 	  System.out.println(resp.toString());
 	  
 	  

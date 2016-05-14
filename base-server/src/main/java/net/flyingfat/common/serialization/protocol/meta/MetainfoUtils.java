@@ -13,6 +13,7 @@ public class MetainfoUtils
 {
   private static final Logger logger = LoggerFactory.getLogger(MetainfoUtils.class);
   private static MetainfoUtils util = new MetainfoUtils();
+  private MetainfoUtils(){};
   
   public static MetainfoUtils getUtil()
   {
@@ -32,7 +33,7 @@ public class MetainfoUtils
             {
               ClassLoader cl = Thread.currentThread().getContextClassLoader();
               if (logger.isDebugEnabled()) {
-                logger.debug("using ClassLoader {" + cl + "} to load Class {" + clsName + "}");
+                logger.debug("using ClassLoader {} to load Class {}",new Object[]{cl,clsName});
               }
               Class<?> cls = cl.loadClass(clsName);
               SignalCode attr = (SignalCode)cls.getAnnotation(SignalCode.class);
@@ -40,12 +41,12 @@ public class MetainfoUtils
               {
                 int value = attr.messageCode();
                 typeMetainfo.add(value, cls);
-                logger.info("metainfo: add " + value + ":=>" + cls);
+                logger.info("metainfo: add  {}  :=>  {}",value,cls);
               }
             }
             catch (ClassNotFoundException e)
             {
-              logger.error("createTypeMetainfo: ", e);
+              logger.error("createTypeMetainfo: {}", e);
             }
           }
         }

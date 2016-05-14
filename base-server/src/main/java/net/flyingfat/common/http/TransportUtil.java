@@ -1,12 +1,12 @@
 package net.flyingfat.common.http;
 
-import net.flyingfat.common.http.endpoint.Endpoint;
-import net.flyingfat.common.lang.Propertyable;
-import net.flyingfat.common.lang.transport.Sender;
-
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelLocal;
 import org.jboss.netty.handler.codec.http.HttpRequest;
+
+import net.flyingfat.common.http.endpoint.Endpoint;
+import net.flyingfat.common.lang.Propertyable;
+import net.flyingfat.common.lang.transport.Sender;
 
 public class TransportUtil
 {

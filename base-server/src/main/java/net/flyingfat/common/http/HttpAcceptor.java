@@ -1,19 +1,5 @@
 package net.flyingfat.common.http;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
-
-import net.flyingfat.common.http.endpoint.DefaultEndpointFactory;
-import net.flyingfat.common.http.endpoint.Endpoint;
-import net.flyingfat.common.http.endpoint.EndpointFactory;
-import net.flyingfat.common.http.reactor.ConstantResponseReactor;
-import net.flyingfat.common.http.reactor.HttpReactor;
-import net.flyingfat.common.http.response.ConstantResponse;
-import net.flyingfat.common.lang.Transformer;
-import net.flyingfat.common.lang.holder.Holder;
-import net.flyingfat.common.lang.transport.Receiver;
-
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelException;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -30,12 +16,24 @@ import org.jboss.netty.handler.codec.http.HttpChunkAggregator;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpServerCodec;
-import org.jboss.netty.handler.timeout.IdleState;
-import org.jboss.netty.handler.timeout.IdleStateAwareChannelUpstreamHandler;
+import org.jboss.netty.handler.timeout.IdleStateAwareChannelHandler;
 import org.jboss.netty.handler.timeout.IdleStateEvent;
 import org.jboss.netty.handler.timeout.IdleStateHandler;
-import org.jboss.netty.util.HashedWheelTimer;
-import org.jboss.netty.util.Timer;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
+
+import net.flyingfat.common.http.endpoint.DefaultEndpointFactory;
+import net.flyingfat.common.http.endpoint.Endpoint;
+import net.flyingfat.common.http.endpoint.EndpointFactory;
+import net.flyingfat.common.http.reactor.ConstantResponseReactor;
+import net.flyingfat.common.http.reactor.HttpReactor;
+import net.flyingfat.common.http.response.ConstantResponse;
+import net.flyingfat.common.lang.Transformer;
+import net.flyingfat.common.lang.holder.Holder;
+import net.flyingfat.common.lang.transport.Receiver;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +61,7 @@ public class HttpAcceptor
   public void start()
     throws IOException
   {
-	//final HashedWheelTimer timer=new HashedWheelTimer(); CCS 服务需要使用
+	//final HashedWheelTimer timer=new HashedWheelTimer(); 没有前端代理(haproxy,nginx)服务，java直接暴露给客户端时需要使用，进行定时检测关闭连接
     this.bootstrap.setPipelineFactory(new ChannelPipelineFactory()
     {
       public ChannelPipeline getPipeline()
@@ -126,7 +124,7 @@ public class HttpAcceptor
   }
   
   private class HttpRequestHandler
-    extends IdleStateAwareChannelUpstreamHandler
+    extends IdleStateAwareChannelHandler
   {
     private final Logger logger = LoggerFactory.getLogger(HttpRequestHandler.class);
     

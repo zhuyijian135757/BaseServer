@@ -36,11 +36,11 @@ public class BaseServer {
 			respEncoder.setDebugEnabled(true);
 			respEncoder.setEncryptKey("__jDlog_".getBytes());
 			
-			SimpleDispatcher bizEntry=new SimpleDispatcher();
-			bizEntry.setThreads(3);
+			SimpleDispatcher disPatcher=new SimpleDispatcher();
+			disPatcher.setThreads(3);
 			List<BusinessCourse> bCourse=new ArrayList<BusinessCourse>();
 			bCourse.add(new MainCourse());
-			bizEntry.setCourses(bCourse);
+			disPatcher.setCourses(bCourse);
 			
 			HttpAcceptor httpAcceptor=new HttpAcceptor();
 			httpAcceptor.setAcceptIp("0.0.0.0");
@@ -48,7 +48,7 @@ public class BaseServer {
 			httpAcceptor.setIdleTime(300);
 			httpAcceptor.setRequestDecoder(reqDecoder);
 			httpAcceptor.setResponseEncoder(respEncoder);
-			httpAcceptor.setMessageClosure(bizEntry);
+			httpAcceptor.setMessageClosure(disPatcher);
 			
 			httpAcceptor.start();
 			

@@ -2,6 +2,7 @@ package net.flyingfat.common.http.response;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;

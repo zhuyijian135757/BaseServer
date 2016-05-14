@@ -1,15 +1,7 @@
 package net.flyingfat.common.http;
 
-import java.net.SocketAddress;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import org.jboss.netty.bootstrap.Bootstrap;
 import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelConfig;
 import org.jboss.netty.channel.ChannelException;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
@@ -22,6 +14,14 @@ import org.jboss.netty.channel.ChildChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.ServerChannelFactory;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
+
+import java.net.SocketAddress;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class ServerBootstrap
   extends Bootstrap

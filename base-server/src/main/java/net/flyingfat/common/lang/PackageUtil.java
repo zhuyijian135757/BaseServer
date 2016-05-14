@@ -116,7 +116,6 @@ public class PackageUtil
     if (packageName.endsWith(".*"))
     {
       packageOnly = packageName.substring(0, packageName.lastIndexOf(".*"));
-      
       recursive = true;
     }
     List<String> vResult = new ArrayList();
@@ -159,7 +158,7 @@ public class PackageUtil
               packageName = name.substring(0, idx).replace('/', '.');
             }
             if (logger.isDebugEnabled()) {
-              logger.debug("PackageUtils: Package name is " + packageName);
+              logger.debug("PackageUtils: Package name is {}", packageName);
             }
             if ((idx != -1) || (recursive)) {
               if ((name.endsWith(".class")) && (!entry.isDirectory()))
@@ -193,7 +192,7 @@ public class PackageUtil
       }
     });
     if (logger.isDebugEnabled()) {
-      logger.debug("PackageUtils: Looking for test classes in the directory: " + dir);
+      logger.debug("PackageUtils: Looking for test classes in the directory: {}", dir);
     }
     for (File file : dirfiles) {
       if (file.isDirectory())
@@ -204,7 +203,7 @@ public class PackageUtil
       {
         String className = file.getName().substring(0, file.getName().length() - 6);
         if (logger.isDebugEnabled()) {
-          logger.debug("PackageUtils: Found class " + className + ", seeing it if it's included or excluded");
+          logger.debug("PackageUtils: Found class {}, seeing it if it's included or excluded",className);
         }
         includeOrExcludeClass(packageName, className, included, excluded, classes);
       }
@@ -216,13 +215,13 @@ public class PackageUtil
     if (isIncluded(className, included, excluded))
     {
       if (logger.isDebugEnabled()) {
-        logger.debug("PackageUtils: ... Including class " + className);
+        logger.debug("PackageUtils: ... Including class {}", className);
       }
       classes.add(packageName + '.' + className);
     }
     else if (logger.isDebugEnabled())
     {
-      logger.debug("PackageUtils: ... Excluding class " + className);
+      logger.debug("PackageUtils: ... Excluding class {}", className);
     }
   }
   
